@@ -49,20 +49,20 @@ BINDIR = $(PREFIX)/bin
 
 # 默认目标：编译所有程序
 # 输入 make 时执行这个
-all: $(TARGET1) $(TARGET2)
+all: external_test user_input
 	@echo "✓ 全部编译完成！"
 	@echo "运行方式:"
-	@echo "  ./$(TARGET1)    # 角距离计算器"
-	@echo "  ./$(TARGET2)    # 外部程序测试"
+	@echo "  ./external_test    # 角距离计算器"
+	@echo "  ./user_input    # 外部程序测试"
 
 # 链接：把所有.o文件合并成可执行程序
-$(TARGET1): $(OBJECTS1)
-	@echo ">> 链接 $(TARGET1)..."
-	$(CC) $(OBJECTS1) -o $(TARGET1) $(LDFLAGS)
+external_test: $(OBJECTS1)
+	@echo ">> 链接 external_test..."
+	$(CC) $(OBJECTS1) -o external_test $(LDFLAGS)
 
-$(TARGET2): $(OBJECTS2)
-	@echo ">> 链接 $(TARGET2)..."
-	$(CC) $(OBJECTS2) -o $(TARGET2) $(LDFLAGS)
+user_input: $(OBJECTS2)
+	@echo ">> 链接 user_input..."
+	$(CC) $(OBJECTS2) -o user_input $(LDFLAGS)
 
 # 编译规则：.c → .o
 # $<: 第一个依赖文件
@@ -74,22 +74,22 @@ $(TARGET2): $(OBJECTS2)
 # 清理编译产物
 clean:
 	@echo ">> 清理编译文件..."
-	rm -f $(OBJECTS1) $(OBJECTS2) $(TARGET1) $(TARGET2)
+	rm -f $(OBJECTS1) $(OBJECTS2) external_test user_input
 	@echo "✓ 清理完成"
 
 # 安装到系统目录（需要sudo权限）
-install: $(TARGET1) $(TARGET2)
+install: external_test user_input
 	@echo ">> 安装到 $(BINDIR)..."
 	install -d $(BINDIR)
-	install -m 755 $(TARGET1) $(BINDIR)
-	install -m 755 $(TARGET2) $(BINDIR)
+	install -m 755 external_test $(BINDIR)
+	install -m 755 user_input $(BINDIR)
 	@echo "✓ 安装完成！现在可以在任何地方运行程序"
 
 # 卸载
 uninstall:
 	@echo ">> 从 $(BINDIR) 移除..."
-	rm -f $(BINDIR)/$(TARGET1)
-	rm -f $(BINDIR)/$(TARGET2)
+	rm -f $(BINDIR)/external_test
+	rm -f $(BINDIR)/user_input
 	@echo "✓ 卸载完成"
 
 # 声明伪目标（这些不是真实文件）
