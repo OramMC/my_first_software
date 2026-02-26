@@ -1,0 +1,20 @@
+# 编译产物
+*.o
+*.obj
+*.exe
+angular_calc
+
+# 编辑器临时文件
+*.swp
+*.swo
+*~
+
+# IDE文件夹
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
