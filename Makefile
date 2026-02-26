@@ -30,13 +30,16 @@ LDFLAGS = -lm
 SRC_DIR = src
 
 # 目标程序名
-TARGET = angular_calc
+TARGET1 = angular_calc
+TARGET2 = external_test
 
 # 源文件列表
-SOURCES = $(SRC_DIR)/angular_distance.c $(SRC_DIR)/astro_math.c
+SOURCES1 = $(SRC_DIR)/angular_distance.c $(SRC_DIR)/astro_math.c
+SOURCES2 = $(SRC_DIR)/external_test.c
 
 # 目标文件（.c → .o）
-OBJECTS = $(SOURCES:.c=.o)
+OBJECTS1 = $(SOURCES1:.c=.o)
+OBJECTS2 = $(SOURCES2:.c=.o)
 
 # 安装目录（make install 会把程序复制到这里）
 PREFIX = /usr/local
@@ -44,15 +47,22 @@ BINDIR = $(PREFIX)/bin
 
 # ---------- 构建规则 ----------
 
-# 默认目标：编译程序
+# 默认目标：编译所有程序
 # 输入 make 时执行这个
-all: $(TARGET)
-	@echo "✓ 编译完成！运行方式: ./$(TARGET)"
+all: $(TARGET1) $(TARGET2)
+	@echo "✓ 全部编译完成！"
+	@echo "运行方式:"
+	@echo "  ./$(TARGET1)    # 角距离计算器"
+	@echo "  ./$(TARGET2)    # 外部程序测试"
 
 # 链接：把所有.o文件合并成可执行程序
-$(TARGET): $(OBJECTS)
-	@echo ">> 链接目标文件..."
-	$(CC) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
+$(TARGET1): $(OBJECTS1)
+	@echo ">> 链接 $(TARGET1)..."
+	$(CC) $(OBJECTS1) -o $(TARGET1) $(LDFLAGS)
+
+$(TARGET2): $(OBJECTS2)
+	@echo ">> 链接 $(TARGET2)..."
+	$(CC) $(OBJECTS2) -o $(TARGET2) $(LDFLAGS)
 
 # 编译规则：.c → .o
 # $<: 第一个依赖文件
@@ -64,20 +74,22 @@ $(TARGET): $(OBJECTS)
 # 清理编译产物
 clean:
 	@echo ">> 清理编译文件..."
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f $(OBJECTS1) $(OBJECTS2) $(TARGET1) $(TARGET2)
 	@echo "✓ 清理完成"
 
 # 安装到系统目录（需要sudo权限）
-install: $(TARGET)
+install: $(TARGET1) $(TARGET2)
 	@echo ">> 安装到 $(BINDIR)..."
 	install -d $(BINDIR)
-	install -m 755 $(TARGET) $(BINDIR)
-	@echo "✓ 安装完成！现在可以在任何地方运行 $(TARGET)"
+	install -m 755 $(TARGET1) $(BINDIR)
+	install -m 755 $(TARGET2) $(BINDIR)
+	@echo "✓ 安装完成！现在可以在任何地方运行程序"
 
 # 卸载
 uninstall:
 	@echo ">> 从 $(BINDIR) 移除..."
-	rm -f $(BINDIR)/$(TARGET)
+	rm -f $(BINDIR)/$(TARGET1)
+	rm -f $(BINDIR)/$(TARGET2)
 	@echo "✓ 卸载完成"
 
 # 声明伪目标（这些不是真实文件）
