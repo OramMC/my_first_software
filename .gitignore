@@ -18,3 +18,7 @@ angular_calc
 
 # Windows
 Thumbs.db
+
+# 编译产物
+external_test
+user_input
